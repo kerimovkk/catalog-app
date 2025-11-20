@@ -120,7 +120,8 @@ func (h *CatalogHandler) HandleGetByCode(w http.ResponseWriter, r *http.Request)
 	variants := make([]VariantDTO, len(product.Variants))
 	for i, v := range product.Variants {
 		price := product.Price
-		if v.Price.IsPositive() {
+		// If variant has a specific price (not zero/null), use it; otherwise inherit from product
+		if !v.Price.IsZero() {
 			price = v.Price
 		}
 		variants[i] = VariantDTO{
